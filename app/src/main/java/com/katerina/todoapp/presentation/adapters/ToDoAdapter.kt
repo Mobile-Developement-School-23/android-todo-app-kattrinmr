@@ -1,13 +1,16 @@
 package com.katerina.todoapp.presentation.adapters
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.ItemTaskBinding
 import com.katerina.todoapp.domain.models.TaskModel
+import com.katerina.todoapp.presentation.extensions.invisible
 import com.katerina.todoapp.presentation.extensions.toDateFormat
 import com.katerina.todoapp.presentation.extensions.visible
 
@@ -31,7 +34,17 @@ class ToDoAdapter(
                     setOnClickListener { onCheckboxClicked(task.id, isChecked) }
                 }
 
-                tvTaskText.text = task.text
+                tvTaskText.apply {
+                    paintFlags = if (task.isDone) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+
+                    if (task.isDone) setTextColor(context.getColor(R.color.label_tertiary))
+                    else setTextColor(context.getColor(R.color.label_primary))
+
+                    text = task.text
+                }
+
+                tvTaskDeadline.invisible()
 
                 task.deadlineDateTimestamp?.let { timestamp ->
                     timestamp.toDateFormat(context).also {

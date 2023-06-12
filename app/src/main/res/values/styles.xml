@@ -33,6 +33,6 @@
 
     <style name="TextViewSubheadStyle">
         <item name="android:textColor">@color/label_tertiary</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/subhead</item>
     </style>
 </resources>
