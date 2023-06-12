@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ToDoApp</string>
+    <string name="txt_personal_todo_title">Мои дела</string>
+    <string name="txt_done_count">Выполнено — </string>
 </resources>

@@ -1,8 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.ToDoApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/back_primary</item>
+        <item name="android:statusBarColor">@color/status_bar_primary</item>
+
+        <item name="android:textColorPrimary">@color/label_primary</item>
+        <item name="android:textColorSecondary">@color/label_secondary</item>
+        <item name="android:textColorTertiary">@color/label_tertiary</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/label_disable</item>
+
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
+
     </style>
 
     <style name="Theme.ToDoApp" parent="Base.Theme.ToDoApp" />
