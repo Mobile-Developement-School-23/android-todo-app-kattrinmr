@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_small"
-    android:background="@color/back_secondary">
+    android:background="@color/back_secondary"
+    android:foreground="?attr/selectableItemBackground">
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cb_is_done"

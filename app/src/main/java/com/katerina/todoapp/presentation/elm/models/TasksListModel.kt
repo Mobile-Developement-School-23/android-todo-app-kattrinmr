@@ -20,6 +20,7 @@ sealed interface TasksListEvent {
         object Init : Ui
         object AddNewTaskClicked : Ui
         data class OnTaskCheckboxClicked(val taskId: String, val status: Boolean) : Ui
+        data class OnTaskDraggedOrSwiped(val tasks: List<TaskModel>) : Ui
     }
 
     sealed interface Internal : TasksListEvent {

@@ -1,4 +1,4 @@
-package com.katerina.todoapp.presentation.delegates
+package com.katerina.todoapp.presentation.base.delegates
 
 import android.view.View
 import androidx.fragment.app.Fragment

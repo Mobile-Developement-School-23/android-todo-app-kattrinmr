@@ -10,14 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.ItemTaskBinding
 import com.katerina.todoapp.domain.models.TaskModel
-import com.katerina.todoapp.presentation.extensions.invisible
-import com.katerina.todoapp.presentation.extensions.toDateFormat
-import com.katerina.todoapp.presentation.extensions.visible
+import com.katerina.todoapp.presentation.base.extensions.invisible
+import com.katerina.todoapp.presentation.base.extensions.toDateFormat
+import com.katerina.todoapp.presentation.base.extensions.visible
+import java.util.Collections
 
 class ToDoAdapter(
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
-    private val onTaskClicked: (taskId: String) -> Unit
-) : ListAdapter<TaskModel, ToDoAdapter.ToDoViewHolder>(ToDoItemDiffCallback()) {
+    private val onTaskClicked: (taskId: String) -> Unit,
+    private val onTaskDraggedOrSwiped: (tasks: List<TaskModel>) -> Unit
+) : ListAdapter<TaskModel, ToDoAdapter.ToDoViewHolder>(ToDoItemDiffCallback()),
+    ItemTouchHelperAdapter {
 
     class ToDoViewHolder(
         private val binding: ItemTaskBinding,
@@ -75,6 +78,37 @@ class ToDoAdapter(
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        val tasks = currentList.toMutableList()
+
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(tasks, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(tasks, i, i - 1)
+            }
+        }
+
+        onTaskDraggedOrSwiped(tasks.toList())
+    }
+
+    override fun onItemSwipedToRight(position: Int) {
+        val tasks = currentList.toMutableList()
+        val task = tasks[position]
+
+        tasks[position] = task.copy(isDone = !task.isDone)
+        onTaskDraggedOrSwiped(tasks.toList())
+    }
+
+    override fun onItemSwipedToLeft(position: Int) {
+        val tasks = currentList.toMutableList()
+
+        tasks.removeAt(position)
+        onTaskDraggedOrSwiped(tasks.toList())
     }
 }
 

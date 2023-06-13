@@ -1,11 +1,11 @@
-package com.katerina.todoapp.presentation.extensions
+package com.katerina.todoapp.presentation.base.extensions
 
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.katerina.todoapp.presentation.delegates.ViewBindingDelegate
+import com.katerina.todoapp.presentation.base.delegates.ViewBindingDelegate
 
 inline fun <T: ViewBinding> AppCompatActivity.viewBinding(
     crossinline bindingInflater: (LayoutInflater) -> T

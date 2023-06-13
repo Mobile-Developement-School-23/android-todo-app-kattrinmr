@@ -1,4 +1,4 @@
-package com.katerina.todoapp.presentation.extensions
+package com.katerina.todoapp.presentation.base.extensions
 
 import com.katerina.todoapp.data.results.RepositoryResult
 import kotlinx.coroutines.flow.Flow

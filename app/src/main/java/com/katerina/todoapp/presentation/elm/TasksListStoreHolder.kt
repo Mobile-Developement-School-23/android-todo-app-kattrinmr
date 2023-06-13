@@ -12,8 +12,7 @@ object TasksListStoreHolder {
 
     @Volatile
     private var store:
-            ElmStoreCompat<TasksListEvent, TasksListState, TasksListEffect, TasksListCommand>? =
-        null
+            ElmStoreCompat<TasksListEvent, TasksListState, TasksListEffect, TasksListCommand>? = null
 
     fun getStore() =
         store ?: synchronized(this) {

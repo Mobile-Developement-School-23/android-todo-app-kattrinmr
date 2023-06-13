@@ -1,4 +1,4 @@
-package com.katerina.todoapp.presentation.extensions
+package com.katerina.todoapp.presentation.base.extensions
 
 import android.content.Context
 import android.os.Build

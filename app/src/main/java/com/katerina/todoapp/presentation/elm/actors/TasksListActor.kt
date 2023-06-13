@@ -6,7 +6,7 @@ import com.katerina.todoapp.domain.usecases.ChangeTaskStatusUseCase
 import com.katerina.todoapp.domain.usecases.GetAllTasksUseCase
 import com.katerina.todoapp.presentation.elm.models.TasksListCommand
 import com.katerina.todoapp.presentation.elm.models.TasksListEvent
-import com.katerina.todoapp.presentation.extensions.mapResultEvents
+import com.katerina.todoapp.presentation.base.extensions.mapResultEvents
 import vivid.money.elmslie.coroutines.Actor
 
 class TasksListActor : Actor<TasksListCommand, TasksListEvent> {

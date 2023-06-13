@@ -2,21 +2,22 @@ package com.katerina.todoapp.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.katerina.todoapp.R
-import com.katerina.todoapp.data.utils.tasksListStub
 import com.katerina.todoapp.databinding.FragmentTasksListBinding
 import com.katerina.todoapp.domain.models.TaskModel
+import com.katerina.todoapp.presentation.adapters.TaskTouchHelperCallback
 import com.katerina.todoapp.presentation.adapters.ToDoAdapter
 import com.katerina.todoapp.presentation.elm.TasksListStoreHolder
 import com.katerina.todoapp.presentation.elm.models.TasksListEffect
 import com.katerina.todoapp.presentation.elm.models.TasksListEvent
 import com.katerina.todoapp.presentation.elm.models.TasksListState
 import com.katerina.todoapp.presentation.elm.models.TasksListStatus
-import com.katerina.todoapp.presentation.extensions.gone
-import com.katerina.todoapp.presentation.extensions.invisible
-import com.katerina.todoapp.presentation.extensions.showSystemMessage
-import com.katerina.todoapp.presentation.extensions.viewBinding
-import com.katerina.todoapp.presentation.extensions.visible
+import com.katerina.todoapp.presentation.base.extensions.gone
+import com.katerina.todoapp.presentation.base.extensions.invisible
+import com.katerina.todoapp.presentation.base.extensions.showSystemMessage
+import com.katerina.todoapp.presentation.base.extensions.viewBinding
+import com.katerina.todoapp.presentation.base.extensions.visible
 import vivid.money.elmslie.android.base.ElmFragment
 import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
 import vivid.money.elmslie.android.storeholder.StoreHolder
@@ -25,13 +26,7 @@ class TasksListFragment :
     ElmFragment<TasksListEvent, TasksListEffect, TasksListState>(R.layout.fragment_tasks_list) {
 
     private val binding by viewBinding(FragmentTasksListBinding::bind)
-
-    private val toDoAdapter: ToDoAdapter by lazy {
-        ToDoAdapter(
-            this@TasksListFragment::onTaskCheckboxClicked,
-            this@TasksListFragment::onTaskClicked
-        )
-    }
+    private lateinit var toDoAdapter: ToDoAdapter
 
     override val initEvent = TasksListEvent.Ui.Init
 
@@ -72,13 +67,23 @@ class TasksListFragment :
     }
 
     private fun initTasksRecyclerView() {
+        toDoAdapter = ToDoAdapter(
+            this@TasksListFragment::onTaskCheckboxClicked,
+            this@TasksListFragment::onTaskClicked,
+            this@TasksListFragment::onTaskDraggedOrSwiped
+        )
+
+        val touchHelperCallback: ItemTouchHelper.Callback =
+            TaskTouchHelperCallback(toDoAdapter)
+        val touchHelper = ItemTouchHelper(touchHelperCallback)
+
         with(binding) {
             rvTasks.apply {
                 adapter = toDoAdapter
                 setItemViewCacheSize(0)
-            }.also {
-                toDoAdapter.submitList(tasksListStub)
             }
+
+            touchHelper.attachToRecyclerView(rvTasks)
         }
     }
 
@@ -116,5 +121,9 @@ class TasksListFragment :
         with(binding) {
             showSystemMessage(root, "task clicked")
         }
+    }
+
+    private fun onTaskDraggedOrSwiped(tasks: List<TaskModel>) {
+        store.accept(TasksListEvent.Ui.OnTaskDraggedOrSwiped(tasks))
     }
 }
