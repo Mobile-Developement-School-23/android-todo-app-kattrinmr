@@ -83,7 +83,9 @@ class TasksListFragment :
         toDoAdapter = ToDoAdapter(
             this@TasksListFragment::onTaskCheckboxClicked,
             this@TasksListFragment::onTaskClicked,
-            this@TasksListFragment::onTaskDraggedOrSwiped
+            this@TasksListFragment::onTaskSwipedToBeDone,
+            this@TasksListFragment::onTaskSwipedToBeRemoved,
+            this@TasksListFragment::onTaskDragged
         )
 
         val touchHelperCallback: ItemTouchHelper.Callback =
@@ -151,8 +153,16 @@ class TasksListFragment :
         }
     }
 
-    private fun onTaskDraggedOrSwiped(tasks: List<TaskModel>) {
-        store.accept(TasksListEvent.Ui.OnTaskDraggedOrSwiped(tasks))
+    private fun onTaskSwipedToBeDone(task: TaskModel) {
+        store.accept(TasksListEvent.Ui.OnTaskSwipedToBeDone(task))
+    }
+
+    private fun onTaskSwipedToBeRemoved(tasks: List<TaskModel>) {
+        store.accept(TasksListEvent.Ui.OnTaskSwipedToBeRemoved(tasks))
+    }
+
+    private fun onTaskDragged(tasks: List<TaskModel>) {
+        store.accept(TasksListEvent.Ui.OnTaskDragged(tasks))
     }
 
     private fun onShowOrHideDoneTasksBtnClicked() {

@@ -18,7 +18,9 @@ import java.util.Collections
 class ToDoAdapter(
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
     private val onTaskClicked: (taskId: String) -> Unit,
-    private val onTaskDraggedOrSwiped: (tasks: List<TaskModel>) -> Unit
+    private val onTaskSwipedToRight: (task: TaskModel) -> Unit,
+    private val onTaskSwipedToLeft: (tasks: List<TaskModel>) -> Unit,
+    private val onTaskDragged: (tasks: List<TaskModel>) -> Unit
 ) : ListAdapter<TaskModel, ToDoAdapter.ToDoViewHolder>(ToDoItemDiffCallback()),
     ItemTouchHelperAdapter {
 
@@ -93,22 +95,21 @@ class ToDoAdapter(
             }
         }
 
-        onTaskDraggedOrSwiped(tasks.toList())
+        onTaskDragged(tasks)
     }
 
     override fun onItemSwipedToRight(position: Int) {
         val tasks = currentList.toMutableList()
         val task = tasks[position]
 
-        tasks[position] = task.copy(isDone = !task.isDone)
-        onTaskDraggedOrSwiped(tasks.toList())
+        onTaskSwipedToRight(task.copy(isDone = !task.isDone))
     }
 
     override fun onItemSwipedToLeft(position: Int) {
         val tasks = currentList.toMutableList()
 
         tasks.removeAt(position)
-        onTaskDraggedOrSwiped(tasks.toList())
+        onTaskSwipedToLeft(tasks.toList())
     }
 }
 

@@ -1,6 +1,7 @@
 package com.katerina.todoapp.presentation.elm.reducers
 
 import com.katerina.todoapp.domain.models.TaskModel
+import com.katerina.todoapp.presentation.base.extensions.makeTaskDone
 import com.katerina.todoapp.presentation.elm.models.TasksListCommand
 import com.katerina.todoapp.presentation.elm.models.TasksListEffect
 import com.katerina.todoapp.presentation.elm.models.TasksListEvent
@@ -38,7 +39,16 @@ class TasksListReducer
             }
         }
 
-        is TasksListEvent.Ui.OnTaskDraggedOrSwiped -> {
+        is TasksListEvent.Ui.OnTaskDragged -> {
+            state { copy(tasks = event.tasks) }
+        }
+
+        is TasksListEvent.Ui.OnTaskSwipedToBeDone -> {
+            val tasks = state.tasks?.makeTaskDone(event.task) ?: state.tasks
+            state { copy(tasks = tasks, doneTasksCount = getDoneTasksCount(tasks)) }
+        }
+
+        is TasksListEvent.Ui.OnTaskSwipedToBeRemoved -> {
             state { copy(tasks = event.tasks, doneTasksCount = getDoneTasksCount(event.tasks)) }
         }
 
