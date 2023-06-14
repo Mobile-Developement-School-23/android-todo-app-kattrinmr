@@ -3,4 +3,9 @@
     <string name="txt_personal_todo_title">Мои дела</string>
     <string name="txt_done_count">Выполнено — </string>
     <string name="txt_todo_list_empty">Список дел пуст! 🥳</string>
+
+    <!--Content descriptions-->
+    <string name="btn_add_task_content_description">Кнопка создания новой задачи</string>
+    <string name="btn_show_or_hide_done_tasks_content_description">Кнопка скрытия или показа сделанных задач</string>
+    <string name="ic_importance_content_description">Важность задачи</string>
 </resources>

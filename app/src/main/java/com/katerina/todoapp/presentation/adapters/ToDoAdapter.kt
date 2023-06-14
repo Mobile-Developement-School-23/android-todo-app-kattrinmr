@@ -17,6 +17,7 @@ import com.katerina.todoapp.presentation.base.extensions.visible
 import java.util.Collections
 
 class ToDoAdapter(
+    private val context: Context,
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
     private val onTaskClicked: (taskId: String) -> Unit,
     private val onTaskSwipedToRight: (task: TaskModel) -> Unit,
@@ -85,7 +86,7 @@ class ToDoAdapter(
             ItemTaskBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ),
-            parent.context,
+            context,
             onCheckboxClicked,
             onTaskClicked
         )

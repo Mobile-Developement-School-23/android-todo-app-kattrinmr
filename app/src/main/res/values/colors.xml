@@ -7,7 +7,7 @@
 
     <color name="label_primary">#000000</color>
     <color name="label_secondary">#99000000</color>
-    <color name="label_tertiary">#4D000000</color>
+    <color name="label_tertiary">#88000000</color>
     <color name="label_disable">#26000000</color>
 
     <color name="status_bar_primary">#8F8F8F</color>

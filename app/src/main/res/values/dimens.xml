@@ -9,6 +9,9 @@
     <!--Paddings-->
     <dimen name="padding_small">8dp</dimen>
 
+    <!--Radius-->
+    <dimen name="radius_normal">16dp</dimen>
+
     <!--Text sizes-->
     <dimen name="title_large">32sp</dimen>
     <dimen name="text_body">16sp</dimen>

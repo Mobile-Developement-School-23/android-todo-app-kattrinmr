@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Base.Theme.ToDoApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/back_primary</item>
         <item name="android:statusBarColor">@color/status_bar_primary</item>

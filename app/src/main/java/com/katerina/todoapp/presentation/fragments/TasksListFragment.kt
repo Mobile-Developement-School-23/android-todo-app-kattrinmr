@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.FragmentTasksListBinding
 import com.katerina.todoapp.domain.models.TaskModel
+import com.katerina.todoapp.presentation.adapters.ItemRoundedCornersDecoration
 import com.katerina.todoapp.presentation.adapters.TaskTouchHelperCallback
 import com.katerina.todoapp.presentation.adapters.ToDoAdapter
 import com.katerina.todoapp.presentation.elm.TasksListStoreHolder
@@ -31,6 +32,7 @@ class TasksListFragment :
     }
 
     private lateinit var toDoAdapter: ToDoAdapter
+    private lateinit var touchHelperCallback: ItemTouchHelper.Callback
 
     override val initEvent = TasksListEvent.Ui.Init
 
@@ -81,6 +83,7 @@ class TasksListFragment :
 
     private fun initTasksRecyclerView() {
         toDoAdapter = ToDoAdapter(
+            requireContext(),
             this@TasksListFragment::onTaskCheckboxClicked,
             this@TasksListFragment::onTaskClicked,
             this@TasksListFragment::onTaskSwipedToBeDone,
@@ -88,17 +91,18 @@ class TasksListFragment :
             this@TasksListFragment::onTaskDragged
         )
 
-        val touchHelperCallback: ItemTouchHelper.Callback =
-            TaskTouchHelperCallback(toDoAdapter, requireContext())
-        val touchHelper = ItemTouchHelper(touchHelperCallback)
+        touchHelperCallback = TaskTouchHelperCallback(toDoAdapter, requireContext())
 
         with(binding) {
             rvTasks.apply {
                 adapter = toDoAdapter
+                addItemDecoration(ItemRoundedCornersDecoration(requireContext()))
                 setItemViewCacheSize(0)
             }
 
-            touchHelper.attachToRecyclerView(rvTasks)
+            ItemTouchHelper(touchHelperCallback).apply {
+                attachToRecyclerView(rvTasks)
+            }
         }
     }
 
@@ -107,6 +111,8 @@ class TasksListFragment :
         val isShowingDoneTasks = store.currentState.isShowingDoneTasks
 
         with(binding) {
+            rvTasks.invalidateItemDecorations()
+
             if (undoneTasks?.isEmpty() == true && !isShowingDoneTasks) {
                 tvTodoListEmpty.visible()
             } else {
