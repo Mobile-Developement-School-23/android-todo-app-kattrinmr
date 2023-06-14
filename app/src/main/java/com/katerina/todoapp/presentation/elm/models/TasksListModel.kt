@@ -22,7 +22,7 @@ sealed interface TasksListEvent {
         object AddNewTaskClicked : Ui
         data class OnTaskCheckboxClicked(val taskId: String, val status: Boolean) : Ui
         data class OnTaskSwipedToBeDone(val task: TaskModel) : Ui
-        data class OnTaskSwipedToBeRemoved(val tasks: List<TaskModel>) : Ui
+        data class OnTaskSwipedToBeRemoved(val task: TaskModel) : Ui
         data class OnTaskDragged(val tasks: List<TaskModel>) : Ui
         object OnShowOrHideDoneTasksBtnClicked : Ui
     }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.ItemTaskBinding
 import com.katerina.todoapp.domain.models.TaskModel
+import com.katerina.todoapp.domain.utils.TaskImportance
 import com.katerina.todoapp.presentation.base.extensions.invisible
 import com.katerina.todoapp.presentation.base.extensions.toDateFormat
 import com.katerina.todoapp.presentation.base.extensions.visible
@@ -19,7 +20,7 @@ class ToDoAdapter(
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
     private val onTaskClicked: (taskId: String) -> Unit,
     private val onTaskSwipedToRight: (task: TaskModel) -> Unit,
-    private val onTaskSwipedToLeft: (tasks: List<TaskModel>) -> Unit,
+    private val onTaskSwipedToLeft: (task: TaskModel) -> Unit,
     private val onTaskDragged: (tasks: List<TaskModel>) -> Unit
 ) : ListAdapter<TaskModel, ToDoAdapter.ToDoViewHolder>(ToDoItemDiffCallback()),
     ItemTouchHelperAdapter {
@@ -33,6 +34,18 @@ class ToDoAdapter(
 
         fun bind(task: TaskModel) {
             with(binding) {
+
+                when (task.importance) {
+                    TaskImportance.LOW -> {
+                        icImportance.setImageDrawable(null)
+                    }
+
+                    TaskImportance.NORMAL ->
+                        icImportance.setImageResource(R.drawable.ic_normal_importance)
+
+                    TaskImportance.HIGH ->
+                        icImportance.setImageResource(R.drawable.ic_high_importance)
+                }
 
                 cbIsDone.apply {
                     isChecked = task.isDone
@@ -106,10 +119,7 @@ class ToDoAdapter(
     }
 
     override fun onItemSwipedToLeft(position: Int) {
-        val tasks = currentList.toMutableList()
-
-        tasks.removeAt(position)
-        onTaskSwipedToLeft(tasks.toList())
+        onTaskSwipedToLeft(currentList[position])
     }
 }
 

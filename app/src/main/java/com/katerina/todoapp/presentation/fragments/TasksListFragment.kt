@@ -89,7 +89,7 @@ class TasksListFragment :
         )
 
         val touchHelperCallback: ItemTouchHelper.Callback =
-            TaskTouchHelperCallback(toDoAdapter)
+            TaskTouchHelperCallback(toDoAdapter, requireContext())
         val touchHelper = ItemTouchHelper(touchHelperCallback)
 
         with(binding) {
@@ -157,8 +157,8 @@ class TasksListFragment :
         store.accept(TasksListEvent.Ui.OnTaskSwipedToBeDone(task))
     }
 
-    private fun onTaskSwipedToBeRemoved(tasks: List<TaskModel>) {
-        store.accept(TasksListEvent.Ui.OnTaskSwipedToBeRemoved(tasks))
+    private fun onTaskSwipedToBeRemoved(task: TaskModel) {
+        store.accept(TasksListEvent.Ui.OnTaskSwipedToBeRemoved(task))
     }
 
     private fun onTaskDragged(tasks: List<TaskModel>) {
