@@ -39,7 +39,7 @@
         tools:text="10" />
 
     <ImageView
-        android:id="@+id/ic_visible"
+        android:id="@+id/btn_show_or_hide_done_tasks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_medium"
@@ -57,8 +57,8 @@
         android:backgroundTint="@color/blue"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/ic_visible"
-        app:layout_constraintStart_toStartOf="@id/ic_visible"
+        app:layout_constraintEnd_toEndOf="@id/btn_show_or_hide_done_tasks"
+        app:layout_constraintStart_toStartOf="@id/btn_show_or_hide_done_tasks"
         app:shapeAppearanceOverlay="@style/FloatingActionButtonCircleStyle"
         app:tint="@color/white" />
 
@@ -84,6 +84,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv_done_count_title" />
+
+    <TextView
+        android:id="@+id/tv_todo_list_empty"
+        style="@style/TextViewTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_todo_list_empty"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_done_count_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

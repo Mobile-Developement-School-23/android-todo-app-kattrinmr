@@ -18,6 +18,7 @@ import com.katerina.todoapp.presentation.base.extensions.invisible
 import com.katerina.todoapp.presentation.base.extensions.showSystemMessage
 import com.katerina.todoapp.presentation.base.extensions.viewBinding
 import com.katerina.todoapp.presentation.base.extensions.visible
+import com.katerina.todoapp.presentation.base.mappers.toUndoneTasks
 import vivid.money.elmslie.android.base.ElmFragment
 import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
 import vivid.money.elmslie.android.storeholder.StoreHolder
@@ -25,7 +26,10 @@ import vivid.money.elmslie.android.storeholder.StoreHolder
 class TasksListFragment :
     ElmFragment<TasksListEvent, TasksListEffect, TasksListState>(R.layout.fragment_tasks_list) {
 
-    private val binding by viewBinding(FragmentTasksListBinding::bind)
+    private val binding by viewBinding(FragmentTasksListBinding::bind) {
+        onDestroyCallback()
+    }
+
     private lateinit var toDoAdapter: ToDoAdapter
 
     override val initEvent = TasksListEvent.Ui.Init
@@ -43,6 +47,7 @@ class TasksListFragment :
         with(binding) {
             tvDoneCount.text = store.currentState.doneTasksCount.toString()
             btnAddTask.setOnClickListener { onAddTaskBtnClicked() }
+            btnShowOrHideDoneTasks.setOnClickListener { onShowOrHideDoneTasksBtnClicked() }
         }
     }
 
@@ -63,6 +68,14 @@ class TasksListFragment :
         is TasksListEffect.NavigateToCreateNewTask -> {
             // TODO: Реализовать навигацию на экран создания нового дела
             showSystemMessage(binding.root, "CreateNewTask")
+        }
+    }
+
+    private fun onDestroyCallback() {
+        with(binding) {
+            rvTasks.apply {
+                adapter = null
+            }
         }
     }
 
@@ -88,9 +101,24 @@ class TasksListFragment :
     }
 
     private fun showTasks(tasks: List<TaskModel>?) {
-        toDoAdapter.submitList(tasks)
+        val undoneTasks = tasks?.toUndoneTasks()
+        val isShowingDoneTasks = store.currentState.isShowingDoneTasks
 
         with(binding) {
+            if (undoneTasks?.isEmpty() == true && !isShowingDoneTasks) {
+                tvTodoListEmpty.visible()
+            } else {
+                tvTodoListEmpty.gone()
+            }
+
+            if (isShowingDoneTasks) {
+                toDoAdapter.submitList(tasks)
+                btnShowOrHideDoneTasks.setImageResource(R.drawable.ic_invisible)
+            } else {
+                toDoAdapter.submitList(tasks?.toUndoneTasks())
+                btnShowOrHideDoneTasks.setImageResource(R.drawable.ic_visible)
+            }
+
             tvDoneCount.text = store.currentState.doneTasksCount.toString()
             progressBarTasks.gone()
             rvTasks.visible()
@@ -125,5 +153,9 @@ class TasksListFragment :
 
     private fun onTaskDraggedOrSwiped(tasks: List<TaskModel>) {
         store.accept(TasksListEvent.Ui.OnTaskDraggedOrSwiped(tasks))
+    }
+
+    private fun onShowOrHideDoneTasksBtnClicked() {
+        store.accept(TasksListEvent.Ui.OnShowOrHideDoneTasksBtnClicked)
     }
 }

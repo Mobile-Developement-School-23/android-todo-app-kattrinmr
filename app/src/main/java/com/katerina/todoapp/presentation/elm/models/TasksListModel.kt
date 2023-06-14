@@ -5,6 +5,7 @@ import com.katerina.todoapp.domain.models.TaskModel
 data class TasksListState(
     val tasks: List<TaskModel>? = null,
     val doneTasksCount: Int = 0,
+    val isShowingDoneTasks: Boolean = false,
     val tasksListStatus: TasksListStatus = TasksListStatus.Loading
 )
 
@@ -21,6 +22,7 @@ sealed interface TasksListEvent {
         object AddNewTaskClicked : Ui
         data class OnTaskCheckboxClicked(val taskId: String, val status: Boolean) : Ui
         data class OnTaskDraggedOrSwiped(val tasks: List<TaskModel>) : Ui
+        object OnShowOrHideDoneTasksBtnClicked : Ui
     }
 
     sealed interface Internal : TasksListEvent {

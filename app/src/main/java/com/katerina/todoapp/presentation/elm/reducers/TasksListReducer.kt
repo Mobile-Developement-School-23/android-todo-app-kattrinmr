@@ -42,6 +42,10 @@ class TasksListReducer
             state { copy(tasks = event.tasks, doneTasksCount = getDoneTasksCount(event.tasks)) }
         }
 
+        is TasksListEvent.Ui.OnShowOrHideDoneTasksBtnClicked -> {
+            state { copy(isShowingDoneTasks = !state.isShowingDoneTasks) }
+        }
+
         is TasksListEvent.Internal.LoadAllTasksSuccess -> {
             state {
                 copy(

@@ -40,7 +40,7 @@ val tasksListStub = listOf(
         id = "4",
         text = "Купить что-то",
         importance = TaskImportance.LOW,
-        isDone = false,
+        isDone = true,
         creationDateTimestamp = 1686555055,
         changeDateTimestamp = 1686555055
     ),
@@ -48,7 +48,7 @@ val tasksListStub = listOf(
         id = "5",
         text = "Купить что-то",
         importance = TaskImportance.LOW,
-        isDone = false,
+        isDone = true,
         creationDateTimestamp = 1686555055,
         changeDateTimestamp = 1686555055,
         deadlineDateTimestamp = 1686670255
