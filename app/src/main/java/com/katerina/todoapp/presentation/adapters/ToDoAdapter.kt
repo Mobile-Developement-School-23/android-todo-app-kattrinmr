@@ -19,7 +19,7 @@ import java.util.Collections
 class ToDoAdapter(
     private val context: Context,
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
-    private val onTaskClicked: (taskId: String) -> Unit,
+    private val onTaskClicked: (taskId: String, task: TaskModel) -> Unit,
     private val onTaskSwipedToRight: (task: TaskModel) -> Unit,
     private val onTaskSwipedToLeft: (task: TaskModel) -> Unit,
     private val onTaskDragged: (tasks: List<TaskModel>) -> Unit
@@ -30,7 +30,7 @@ class ToDoAdapter(
         private val binding: ItemTaskBinding,
         private val context: Context,
         private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
-        private val onTaskClicked: (taskId: String) -> Unit
+        private val onTaskClicked: (taskId: String, task: TaskModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: TaskModel) {
@@ -75,7 +75,7 @@ class ToDoAdapter(
                 }
 
                 root.setOnClickListener {
-                    onTaskClicked(task.id)
+                    onTaskClicked(task.id, task)
                 }
             }
         }

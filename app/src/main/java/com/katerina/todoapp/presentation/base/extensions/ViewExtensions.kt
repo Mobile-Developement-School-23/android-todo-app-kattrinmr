@@ -1,18 +1,13 @@
 package com.katerina.todoapp.presentation.base.extensions
 
+import android.app.DatePickerDialog
 import android.content.Context
-import android.os.Build
 import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.TimeZone
+import com.katerina.todoapp.R
+import java.util.Calendar
 
 fun View.visible() {
     isVisible = true
@@ -26,21 +21,12 @@ fun View.gone() {
     isGone = true
 }
 
-fun Long.toDateFormat(context: Context): String = when {
-    Build.VERSION.SDK_INT >= 26 -> {
-        val instant = Instant.ofEpochSecond(this)
-        val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    }
+fun View.disable() {
+    isEnabled = false
+}
 
-    else -> {
-        val date = Date(this * 1000)
-        val locale = context.resources.configuration.locales.get(0)
-        val formatter = SimpleDateFormat("yyyy-MM-dd", locale)
-
-        formatter.timeZone = TimeZone.getDefault()
-        formatter.format(date)
-    }
+fun View.enable() {
+    isEnabled = true
 }
 
 fun View.snackbar(
@@ -48,6 +34,16 @@ fun View.snackbar(
     duration: Int = Snackbar.LENGTH_LONG
 ) {
     Snackbar.make(this, message, duration).show()
+}
+
+fun Context.createDatePicker(listener: DatePickerDialog.OnDateSetListener): DatePickerDialog {
+    val calendar = Calendar.getInstance()
+
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    return DatePickerDialog(this, R.style.DatePickerDialogTheme, listener, year, month, day)
 }
 
 fun showSystemMessage(view: View, message: String) {

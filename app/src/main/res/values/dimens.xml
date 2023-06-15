@@ -4,10 +4,12 @@
     <dimen name="margin_extra_large">64dp</dimen>
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_medium">24dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
 
     <!--Paddings-->
     <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
 
     <!--Radius-->
     <dimen name="radius_normal">16dp</dimen>

@@ -2,6 +2,7 @@ package com.katerina.todoapp.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.FragmentTasksListBinding
@@ -21,8 +22,6 @@ import com.katerina.todoapp.presentation.base.extensions.viewBinding
 import com.katerina.todoapp.presentation.base.extensions.visible
 import com.katerina.todoapp.presentation.base.mappers.toUndoneTasks
 import vivid.money.elmslie.android.base.ElmFragment
-import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
-import vivid.money.elmslie.android.storeholder.StoreHolder
 
 class TasksListFragment :
     ElmFragment<TasksListEvent, TasksListEffect, TasksListState>(R.layout.fragment_tasks_list) {
@@ -36,10 +35,7 @@ class TasksListFragment :
 
     override val initEvent = TasksListEvent.Ui.Init
 
-    private val tasksListStoreHolder: StoreHolder<TasksListEvent, TasksListEffect, TasksListState>
-            by lazy { LifecycleAwareStoreHolder(lifecycle) { TasksListStoreHolder.getStore() } }
-
-    override val storeHolder = tasksListStoreHolder
+    override val storeHolder = TasksListStoreHolder.getStore(lifecycle)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,20 +53,33 @@ class TasksListFragment :
         is TasksListStatus.Loading -> showLoading()
         is TasksListStatus.Failure -> showFailure()
         is TasksListStatus.ShowingTasks -> showTasks(state.tasks)
+        else -> Unit
     }
 
     override fun handleEffect(effect: TasksListEffect) = when (effect) {
         is TasksListEffect.ShowSystemMessage -> showSystemMessage(binding.root, effect.message)
+        is TasksListEffect.NavigateToTaskDescriptionScreen -> navigateToTaskDescriptionScreen(effect.taskId)
+        is TasksListEffect.ScrollToBeginningOfList -> { scrollToBeginningOfList() }
+        else -> Unit
+    }
 
-        is TasksListEffect.NavigateToEditTask -> {
-            // TODO: Реализовать навигацию на экран изменения дела
-            showSystemMessage(binding.root, "NavigateToEditTask")
+    private fun scrollToBeginningOfList() {
+        with(binding) {
+            store.currentState.tasks?.let { tasks ->
+                toDoAdapter.submitList(tasks) {
+                    rvTasks.scrollToPosition(0)
+                }
+            }
         }
+    }
 
-        is TasksListEffect.NavigateToCreateNewTask -> {
-            // TODO: Реализовать навигацию на экран создания нового дела
-            showSystemMessage(binding.root, "CreateNewTask")
-        }
+    private fun navigateToTaskDescriptionScreen(id: String?) {
+        findNavController().navigate(
+            TasksListFragmentDirections.actionTasksListFragmentToTaskDescriptionFragment()
+                .apply {
+                    if (id != null) taskId = id
+                }
+        )
     }
 
     private fun onDestroyCallback() {
@@ -152,11 +161,8 @@ class TasksListFragment :
         store.accept(TasksListEvent.Ui.OnTaskCheckboxClicked(taskId, status))
     }
 
-    private fun onTaskClicked(taskId: String) {
-        // TODO: Реализовать клик по делу
-        with(binding) {
-            showSystemMessage(root, "task clicked")
-        }
+    private fun onTaskClicked(taskId: String, task: TaskModel) {
+        store.accept(TasksListEvent.Ui.OnTaskClicked(taskId, task))
     }
 
     private fun onTaskSwipedToBeDone(task: TaskModel) {

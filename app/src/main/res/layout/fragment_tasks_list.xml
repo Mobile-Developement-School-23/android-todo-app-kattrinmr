@@ -93,6 +93,7 @@
         style="@style/TextViewTitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/txt_todo_list_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

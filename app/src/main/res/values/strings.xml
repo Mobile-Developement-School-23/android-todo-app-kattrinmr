@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">ToDoApp</string>
+
     <string name="txt_personal_todo_title">Мои дела</string>
     <string name="txt_done_count">Выполнено — </string>
-    <string name="txt_todo_list_empty">Список дел пуст! 🥳</string>
+    <string name="txt_todo_list_empty">Список дел пуст! 🥳\nМожно наконец-то отдохнуть\nили придумать, чем еще себя загрузить!</string>
+    <string name="txt_save">СОХРАНИТЬ</string>
+    <string name="txt_task_hint">Что надо сделать…</string>
+    <string name="txt_importance_title">Важность</string>
+    <string name="txt_low_importance">Низкая</string>
+    <string name="txt_deadline">Сделать до</string>
+    <string name="txt_delete">Удалить</string>
+    <string name="txt_normal_importance">Нормальная</string>
+    <string name="txt_high_importance">Высокая</string>
+    <string name="txt_choose_date">Выбрать дату</string>
 
     <!--Content descriptions-->
     <string name="btn_add_task_content_description">Кнопка создания новой задачи</string>
     <string name="btn_show_or_hide_done_tasks_content_description">Кнопка скрытия или показа сделанных задач</string>
     <string name="ic_importance_content_description">Важность задачи</string>
+    <string name="btn_close_content_description">Кнопка закрыть</string>
+    <string name="ic_delete_content_description">Иконка удаления задачи</string>
 </resources>
