@@ -63,16 +63,25 @@ class TaskDescriptionFragment :
 
     private val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
         binding.tvDeadline.text = createDateString(day, month + 1, year)
-            .also {
-                store.accept(TasksListEvent.Ui.OnDeadlineDateClicked(dateStringToTimestamp(it)))
+            .also { dateString ->
+                store.accept(
+                    TasksListEvent.Ui.OnDeadlineDateClicked(
+                        dateStringToTimestamp(
+                            dateString
+                        )
+                    )
+                )
             }
     }
 
     private val taskDescriptionTextWatcher = object : CustomTextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             with(binding) {
-                if (s.isNullOrBlank()) { btnSave.disable() }
-                else { btnSave.enable() }
+                if (s.isNullOrBlank()) {
+                    btnSave.disable()
+                } else {
+                    btnSave.enable()
+                }
             }
         }
     }
@@ -133,8 +142,9 @@ class TaskDescriptionFragment :
         with(binding) {
             tvDeadline.apply {
                 if (isChecked) visible() else gone()
-                store.accept(TasksListEvent.Ui.OnDeadlineDateClicked(null))
             }
+
+            if (!isChecked) store.accept(TasksListEvent.Ui.OnDeadlineDateClicked(null))
         }
     }
 
@@ -185,6 +195,7 @@ class TaskDescriptionFragment :
                 store.currentState.tasksListStatus as TasksListStatus.ShowingTaskDescription
 
             if (tasksListStatus.deadlineDateTimestamp != null) {
+
                 if (tasksListStatus.task?.deadlineDateTimestamp != null) {
                     switchEnableDeadline.isChecked = true
                     onSwitchClicked(true)
