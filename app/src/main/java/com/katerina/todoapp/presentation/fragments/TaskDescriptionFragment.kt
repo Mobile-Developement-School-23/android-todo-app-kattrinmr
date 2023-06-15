@@ -27,6 +27,27 @@ import com.katerina.todoapp.presentation.elm.models.TasksListState
 import com.katerina.todoapp.presentation.elm.models.TasksListStatus
 import vivid.money.elmslie.android.base.ElmFragment
 
+/**
+ * [TaskDescriptionFragment] наследуется от [ElmFragment] (который, в свою очередь, наследуется от
+ * обычного [Fragment][androidx.fragment.app.Fragment]) для реализации MVI.
+ *
+ * В [ElmFragment] передаются [TasksListEvent], [TasksListEffect], [TasksListState].
+ *
+ * Функция [render] служит для отрисовки Ui в зависимости от состояния экрана.
+ *
+ * Функция [handleEffect] служит для обработки [TasksListEffect].
+ *
+ * @property[storeHolder] служит для хранения [store], который в свою очередь управляет состоянием экрана
+ * (принимает и управляет [TasksListEvent] с помощью [TasksListActor][com.katerina.todoapp.presentation.elm.actors.TasksListActor]
+ * и [TasksListReducer][com.katerina.todoapp.presentation.elm.reducers.TasksListReducer]).
+ *
+ * @property[initEvent] служит для хранения стартового [TasksListEvent], который вызывается при создании экрана.
+ *
+ * @property[dateListener] служит для хранения слушателя [DatePickerDialog] для выбора даты дедлайна.
+ *
+ * @property[taskDescriptionTextWatcher] служит для слушателя изменений в тексте описания задачи.
+ *
+ */
 class TaskDescriptionFragment :
     ElmFragment<TasksListEvent, TasksListEffect, TasksListState>(R.layout.fragment_task_description) {
 

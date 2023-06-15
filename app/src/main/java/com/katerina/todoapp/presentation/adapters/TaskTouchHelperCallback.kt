@@ -50,6 +50,10 @@ class TaskTouchHelperCallback(
         }
     }
 
+    /**
+     * [onChildDraw] служит для отрисовки фона и добавлении иконок в момент, когда пользовать
+     * делает свайп элемента влево или вправо.
+     */
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,

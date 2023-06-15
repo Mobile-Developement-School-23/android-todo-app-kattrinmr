@@ -16,6 +16,11 @@ import com.katerina.todoapp.presentation.base.extensions.toDateFormat
 import com.katerina.todoapp.presentation.base.extensions.visible
 import java.util.Collections
 
+/**
+ * [ToDoAdapter] - адаптер для RecyclerView списка задач.
+ *
+ * Наследуется от [ItemTouchHelperAdapter] для обработки свайпов и перемещений элементов.
+ */
 class ToDoAdapter(
     private val context: Context,
     private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,

@@ -20,12 +20,13 @@ class ToDoRepositoryImpl : ToDoRepository {
         importance: TaskImportance,
         deadlineDateTimestamp: Long?
     ) = flow {
+
         getAllTasks().collect { result ->
             when (result) {
+
                 is RepositoryResult.Success -> {
                     // Временная реализация, пока не будет ясно, как формируются id
                     val id = (result.data.findMaxIntId() + 1).toString()
-
                     val creationDateTimestamp = System.currentTimeMillis()
 
                     emit(
@@ -54,8 +55,7 @@ class ToDoRepositoryImpl : ToDoRepository {
         status: Boolean
     ) = flow {
 
-        tasks
-            .indexOfFirst { it.id == taskId }
+        tasks.indexOfFirst { it.id == taskId }
             .also { index ->
                 if (index != -1) {
                     tasks.toMutableList()

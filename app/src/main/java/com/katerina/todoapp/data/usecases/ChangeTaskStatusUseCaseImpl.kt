@@ -7,6 +7,9 @@ import com.katerina.todoapp.domain.usecases.ChangeTaskStatusUseCase
 
 class ChangeTaskStatusUseCaseImpl : ChangeTaskStatusUseCase {
 
+    /**
+     * Пока что инициализируется слудующем образом, потом будет инжектиться с помощью даггера
+     */
     private val toDoRepository: ToDoRepository by lazy { ToDoRepositoryImpl() }
 
     override fun invoke(tasks: List<TaskModel>, taskId: String, status: Boolean) =
