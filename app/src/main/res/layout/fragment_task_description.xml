@@ -13,7 +13,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:paddingVertical="@dimen/padding_medium">
 
             <ImageView
@@ -21,6 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:contentDescription="@string/btn_close_content_description"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_close" />
@@ -31,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:layout_marginEnd="@dimen/margin_normal"
                 android:foreground="?attr/selectableItemBackground"
                 android:text="@string/txt_save" />
