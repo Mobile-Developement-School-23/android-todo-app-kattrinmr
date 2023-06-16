@@ -27,7 +27,7 @@ class ItemRoundedCornersDecoration(context: Context) : RecyclerView.ItemDecorati
         ContextCompat.getDrawable(context, R.drawable.bg_item_default)
 
     /**
-     * itemCount == 1 - единственный эламент в списке, значит, оба его угла закругленные
+     * itemCount == 1 - единственный эламент в списке, значит, все его углы закругленные
      *
      * position == 0 - первый элемент, значит, оба верних угла закругленные
      *

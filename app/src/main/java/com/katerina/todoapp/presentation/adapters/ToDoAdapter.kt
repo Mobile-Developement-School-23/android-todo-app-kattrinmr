@@ -19,7 +19,7 @@ import java.util.Collections
 /**
  * [ToDoAdapter] - адаптер для RecyclerView списка задач.
  *
- * Наследуется от [ItemTouchHelperAdapter] для обработки свайпов и перемещений элементов.
+ * Наследуется также от [ItemTouchHelperAdapter] для обработки свайпов и перемещений элементов.
  */
 class ToDoAdapter(
     private val context: Context,
