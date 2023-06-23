@@ -15,14 +15,37 @@ buildscript {
                 'testInstrumentationRunner': "androidx.test.runner.AndroidJUnitRunner",
         ]
 
+        versions = [
+                'navigation': '2.5.3',
+                'elmslie'   : '2.1.1',
+                'leakCanary': '2.10'
+        ]
+
         deps = [
-                'androidx': [
+                'androidx'  : [
                         'core'            : "androidx.core:core-ktx:1.10.1",
                         'appCompat'       : "androidx.appcompat:appcompat:1.6.1",
-                        'constraintlayout': "androidx.constraintlayout:constraintlayout:2.1.4"
+                        'constraintlayout': "androidx.constraintlayout:constraintlayout:2.1.4",
+                        'recyclerView'    : "androidx.recyclerview:recyclerview:1.3.0"
                 ],
-                'material': "com.google.android.material:material:1.9.0",
+                'material'  : "com.google.android.material:material:1.9.0",
+                'navigation': [
+                        'fragment': "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+                        'ui'      : "androidx.navigation:navigation-ui-ktx:${versions.navigation}"
+                ],
+                'elmslie'   : [
+                        'core'      : "com.github.vivid-money.elmslie:elmslie-core:${versions.elmslie}",
+                        'android'   : "com.github.vivid-money.elmslie:elmslie-android:${versions.elmslie}",
+                        'coroutines': "com.github.vivid-money.elmslie:elmslie-coroutines:${versions.elmslie}"
+                ],
+                'leakCanary': "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}"
         ]
+    }
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}")
     }
 }
 plugins {

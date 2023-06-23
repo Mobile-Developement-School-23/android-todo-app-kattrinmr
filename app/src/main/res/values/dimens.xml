@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Margins-->
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_medium">24dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+
+    <!--Paddings-->
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+
+    <!--Radius-->
+    <dimen name="radius_normal">16dp</dimen>
+
+    <!--Text sizes-->
+    <dimen name="title_large">32sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="subhead">14sp</dimen>
+</resources>
