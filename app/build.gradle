@@ -59,4 +59,9 @@ dependencies {
 
     // LeakCanary
     debugImplementation deps.leakCanary
+
+    // Dagger 2
+    kapt deps.dagger.daggerCompiler
+    kapt deps.dagger.daggerProcessor
+    implementation deps.dagger.dagger
 }

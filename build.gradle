@@ -16,9 +16,12 @@ buildscript {
         ]
 
         versions = [
-                'navigation': '2.5.3',
-                'elmslie'   : '2.1.1',
-                'leakCanary': '2.10'
+                'navigation'     : '2.5.3',
+                'elmslie'        : '2.1.1',
+                'leakCanary'     : '2.10',
+                'dagger'         : '2.45',
+                'daggerCompiler' : '2.45',
+                'daggerProcessor': '2.40'
         ]
 
         deps = [
@@ -38,7 +41,12 @@ buildscript {
                         'android'   : "com.github.vivid-money.elmslie:elmslie-android:${versions.elmslie}",
                         'coroutines': "com.github.vivid-money.elmslie:elmslie-coroutines:${versions.elmslie}"
                 ],
-                'leakCanary': "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}"
+                'leakCanary': "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}",
+                'dagger'    : [
+                        'dagger'         : "com.google.dagger:dagger:${versions.dagger}",
+                        'daggerProcessor': "com.google.dagger:dagger-android-processor:${versions.daggerProcessor}",
+                        'daggerCompiler' : "com.google.dagger:dagger-compiler:${versions.daggerCompiler}"
+                ]
         ]
     }
     repositories {
