@@ -38,13 +38,11 @@ sealed interface TasksListStatus {
      * и [TaskDescriptionFragment][com.katerina.todoapp.presentation.fragments.TaskDescriptionFragment], также у этих фрагментов общий store.
      *
      * @param[task] хранит в себе задачу, которую открыли для редактирования
-     * @param[importance] хранит в себе выбранную важность для задачи
-     * @param[deadlineDateTimestamp] хранит в себе выбранный дедлайн для задачи
+     * @param[isCreateNewTask] хранит в себе флаг новая задача / редактирование
      */
     data class ShowingTaskDescription(
-        val task: TaskModel? = null,
-        val importance: TaskImportance = TaskImportance.LOW,
-        val deadlineDateTimestamp: Long? = null
+        val isCreateNewTask: Boolean = false,
+        val task: TaskModel? = null
     ) : TasksListStatus
 }
 

@@ -153,7 +153,14 @@ class TasksListReducer
         }
 
         is TasksListEvent.Ui.AddNewTaskClicked -> {
-            state { copy(tasksListStatus = TasksListStatus.ShowingTaskDescription()) }
+            state {
+                copy(
+                    tasksListStatus = TasksListStatus.ShowingTaskDescription(
+                        isCreateNewTask = true,
+                        task = createDescriptionTask()
+                    )
+                )
+            }
             effects { +TasksListEffect.NavigateToTaskDescriptionScreen(null) }
         }
 
@@ -161,9 +168,8 @@ class TasksListReducer
             state {
                 copy(
                     tasksListStatus = TasksListStatus.ShowingTaskDescription(
-                        task = event.task,
-                        importance = event.task.importance,
-                        deadlineDateTimestamp = event.task.deadlineDateTimestamp
+                        isCreateNewTask = false,
+                        task = event.task
                     )
                 )
             }
@@ -201,29 +207,19 @@ class TasksListReducer
 
         is TasksListEvent.Ui.OnDeadlineDateClicked -> {
             val tasksListStatus = state.tasksListStatus as TasksListStatus.ShowingTaskDescription
+            val task = tasksListStatus.task?.copy(deadlineDateTimestamp = event.timestamp)
 
             state {
-                copy(
-                    tasksListStatus = TasksListStatus.ShowingTaskDescription(
-                        task = tasksListStatus.task,
-                        importance = tasksListStatus.importance,
-                        deadlineDateTimestamp = event.timestamp
-                    )
-                )
+                copy(tasksListStatus = tasksListStatus.copy(task = task))
             }
         }
 
         is TasksListEvent.Ui.OnImportanceSelected -> {
             val tasksListStatus = state.tasksListStatus as TasksListStatus.ShowingTaskDescription
+            val task = tasksListStatus.task?.copy(importance = event.importance)
 
             state {
-                copy(
-                    tasksListStatus = TasksListStatus.ShowingTaskDescription(
-                        task = tasksListStatus.task,
-                        importance = event.importance,
-                        deadlineDateTimestamp = tasksListStatus.deadlineDateTimestamp
-                    )
-                )
+                copy(tasksListStatus = tasksListStatus.copy(task = task))
             }
         }
 
@@ -235,30 +231,31 @@ class TasksListReducer
         is TasksListEvent.Ui.OnSaveBtnClicked -> {
             val tasksListStatus = state.tasksListStatus as TasksListStatus.ShowingTaskDescription
             val task = tasksListStatus.task
+            val isCreateNewTask = tasksListStatus.isCreateNewTask
 
-            val importance = tasksListStatus.importance
-            val deadlineDateTimestamp = tasksListStatus.deadlineDateTimestamp
+            if (task != null) {
+                if (isCreateNewTask) {
 
-            if (task == null) {
-                commands {
-                    +TasksListCommand.AddTask(
-                        event.taskDescription,
-                        importance,
-                        deadlineDateTimestamp
+                    commands {
+                        +TasksListCommand.AddTask(
+                            event.taskDescription,
+                            task.importance,
+                            task.deadlineDateTimestamp
+                        )
+                    }
+
+                    state { copy(tasksListStatus = TasksListStatus.ShowingTasks) }
+
+                } else {
+                    val tasks = state.tasks?.editTask(
+                        taskId = task.id,
+                        text = event.taskDescription,
+                        importance = task.importance,
+                        deadlineDateTimestamp = task.deadlineDateTimestamp
                     )
+
+                    state { copy(tasks = tasks, tasksListStatus = TasksListStatus.ShowingTasks) }
                 }
-
-                state { copy(tasksListStatus = TasksListStatus.ShowingTasks) }
-
-            } else {
-                val tasks = state.tasks?.editTask(
-                    taskId = task.id,
-                    text = event.taskDescription,
-                    importance = importance,
-                    deadlineDateTimestamp
-                )
-
-                state { copy(tasks = tasks, tasksListStatus = TasksListStatus.ShowingTasks) }
             }
 
             effects { +TasksListEffect.NavigateToTaskListScreen }
@@ -299,6 +296,14 @@ class TasksListReducer
             effects { +TasksListEffect.ShowSystemMessage(event.errorMessage) }
         }
     }
+
+    private fun createDescriptionTask() = TaskModel(
+        id = "",
+        text = "",
+        isDone = false,
+        creationDateTimestamp = 0,
+        changeDateTimestamp = 0
+    )
 
     private fun getDoneTasksCount(tasks: List<TaskModel>?): Int =
         tasks?.count { it.isDone } ?: 0

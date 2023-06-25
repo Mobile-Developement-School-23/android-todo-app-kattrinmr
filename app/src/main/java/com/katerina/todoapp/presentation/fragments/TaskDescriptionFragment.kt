@@ -194,22 +194,23 @@ class TaskDescriptionFragment :
             val tasksListStatus =
                 store.currentState.tasksListStatus as TasksListStatus.ShowingTaskDescription
 
-            if (tasksListStatus.deadlineDateTimestamp != null) {
+            val task = tasksListStatus.task
 
-                if (tasksListStatus.task?.deadlineDateTimestamp != null) {
-                    switchEnableDeadline.isChecked = true
-                    onSwitchClicked(true)
-                }
+            if (task?.deadlineDateTimestamp != null) {
+
+                switchEnableDeadline.isChecked = true
+                onSwitchClicked(true)
 
                 tvDeadline.text =
-                    tasksListStatus.deadlineDateTimestamp.toDateFormat(requireContext())
+                    task.deadlineDateTimestamp.toDateFormat(requireContext())
             }
 
-            tasksListStatus.task?.text?.let { text ->
-                etTaskDescription.setText(text)
+            task?.text?.let { text ->
+                if (text.isNotBlank())
+                    etTaskDescription.setText(text)
             }
 
-            tvImportance.text = tasksListStatus.importance.getLocalName(requireContext())
+            tvImportance.text = task?.importance?.getLocalName(requireContext())
         }
     }
 
