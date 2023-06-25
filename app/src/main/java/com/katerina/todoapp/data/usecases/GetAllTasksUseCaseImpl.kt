@@ -1,15 +1,11 @@
 package com.katerina.todoapp.data.usecases
 
-import com.katerina.todoapp.data.repositories.ToDoRepositoryImpl
 import com.katerina.todoapp.domain.repositories.ToDoRepository
 import com.katerina.todoapp.domain.usecases.GetAllTasksUseCase
+import javax.inject.Inject
 
-class GetAllTasksUseCaseImpl : GetAllTasksUseCase {
-
-    /**
-     * Пока что инициализируется слудующем образом, потом будет инжектиться с помощью даггера
-     */
-    private val toDoRepository: ToDoRepository by lazy { ToDoRepositoryImpl() }
-
+class GetAllTasksUseCaseImpl @Inject constructor(
+    private val toDoRepository: ToDoRepository
+) : GetAllTasksUseCase {
     override fun invoke() = toDoRepository.getAllTasks()
 }

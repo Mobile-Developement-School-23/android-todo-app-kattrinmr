@@ -4,64 +4,74 @@ import com.katerina.todoapp.data.results.RepositoryResult
 import com.katerina.todoapp.data.utils.tasksListStub
 import com.katerina.todoapp.domain.models.TaskModel
 import com.katerina.todoapp.domain.repositories.ToDoRepository
-import com.katerina.todoapp.domain.utils.TaskImportance
 import com.katerina.todoapp.presentation.base.extensions.findMaxIntId
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class ToDoRepositoryImpl : ToDoRepository {
+class ToDoRepositoryImpl @Inject constructor() : ToDoRepository {
+
+    private var repositoryTasks = tasksListStub
 
     override fun getAllTasks(): Flow<RepositoryResult<List<TaskModel>>> = flow {
-        emit(RepositoryResult.Success(tasksListStub))
+        emit(RepositoryResult.Success(repositoryTasks.toList()))
     }
 
-    override fun addTask(
-        text: String,
-        importance: TaskImportance,
-        deadlineDateTimestamp: Long?
-    ) = flow {
+    override fun addTask(task: TaskModel) = flow {
+        val tasks = repositoryTasks.toMutableList()
 
-        getAllTasks().collect { result ->
-            when (result) {
+        val id = tasks.findMaxIntId() + 1
+        val creationDateTimestamp = System.currentTimeMillis()
 
-                is RepositoryResult.Success -> {
-                    // Временная реализация, пока не будет ясно, как формируются id
-                    val id = (result.data.findMaxIntId() + 1).toString()
-                    val creationDateTimestamp = System.currentTimeMillis()
+        tasks.add(
+            0,
+            task.copy(
+                id = id.toString(),
+                creationDateTimestamp = creationDateTimestamp,
+                changeDateTimestamp = creationDateTimestamp
+            )
+        )
 
-                    emit(
-                        RepositoryResult.Success(
-                            TaskModel(
-                                id = id,
-                                text = text,
-                                importance = importance,
-                                isDone = false,
-                                creationDateTimestamp = creationDateTimestamp,
-                                changeDateTimestamp = creationDateTimestamp,
-                                deadlineDateTimestamp = deadlineDateTimestamp
-                            )
-                        )
-                    )
-                }
-
-                is RepositoryResult.Error -> emit(RepositoryResult.Error(result.message))
-            }
+        repositoryTasks = tasks.toList().also {
+            emit(RepositoryResult.Success(it))
         }
     }
 
-    override fun changeTaskStatus(
-        tasks: List<TaskModel>,
-        taskId: String,
-        status: Boolean
-    ) = flow {
+    override fun removeTask(task: TaskModel) = flow {
+        val tasks = repositoryTasks.toMutableList()
+        val index = tasks.indexOfFirst { it.id == task.id }
 
-        tasks.indexOfFirst { it.id == taskId }
-            .also { index ->
-                if (index != -1) {
-                    tasks.toMutableList()
-                        .apply { this[index] = this[index].copy(isDone = status) }
-                        .also { emit(RepositoryResult.Success(it.toList())) }
-                }
-            }
+        if (index != -1) {
+            tasks.removeAt(index)
+        }
+
+        repositoryTasks = tasks.toList().also {
+            emit(RepositoryResult.Success(it))
+        }
+    }
+
+    override fun editTask(task: TaskModel) = flow {
+        val tasks = repositoryTasks.toMutableList()
+        val index = tasks.indexOfFirst { it.id == task.id }
+
+        if (index != -1) {
+            val uneditedTask = tasks[index]
+
+            val editedTask = uneditedTask.copy(
+                id = task.id,
+                text = task.text,
+                importance = task.importance,
+                isDone = task.isDone,
+                creationDateTimestamp = task.creationDateTimestamp,
+                changeDateTimestamp = System.currentTimeMillis(),
+                deadlineDateTimestamp = task.deadlineDateTimestamp
+            )
+
+            tasks[index] = editedTask
+        }
+
+        repositoryTasks = tasks.toList().also {
+            emit(RepositoryResult.Success(it))
+        }
     }
 }

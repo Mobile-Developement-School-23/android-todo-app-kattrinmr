@@ -37,8 +37,8 @@ sealed interface TasksListStatus {
      * Служит для передачи данных между [TasksListFragment][com.katerina.todoapp.presentation.fragments.TasksListFragment]
      * и [TaskDescriptionFragment][com.katerina.todoapp.presentation.fragments.TaskDescriptionFragment], также у этих фрагментов общий store.
      *
-     * @param[task] хранит в себе задачу, которую открыли для редактирования
      * @param[isCreateNewTask] хранит в себе флаг новая задача / редактирование
+     * @param[task] хранит в себе задачу, которую открыли для редактирования
      */
     data class ShowingTaskDescription(
         val isCreateNewTask: Boolean = false,
@@ -57,7 +57,7 @@ sealed interface TasksListEvent {
         object Init : Ui
         object AddNewTaskClicked : Ui
         data class OnTaskClicked(val taskId: String, val task: TaskModel) : Ui
-        data class OnTaskCheckboxClicked(val taskId: String, val status: Boolean) : Ui
+        data class OnTaskCheckboxClicked(val task: TaskModel) : Ui
         data class OnTaskSwipedToBeDone(val task: TaskModel) : Ui
         data class OnTaskSwipedToBeRemoved(val task: TaskModel) : Ui
         data class OnTaskDragged(val tasks: List<TaskModel>) : Ui
@@ -71,7 +71,9 @@ sealed interface TasksListEvent {
 
     sealed interface Internal : TasksListEvent {
         data class LoadAllTasksSuccess(val tasks: List<TaskModel>) : Internal
-        data class AddTaskSuccess(val task: TaskModel) : Internal
+        data class AddTaskSuccess(val tasks: List<TaskModel>) : Internal
+        data class RemoveTaskSuccess(val tasks: List<TaskModel>) : Internal
+        data class EditTaskSuccess(val tasks: List<TaskModel>) : Internal
         data class Error(val errorMessage: String) : Internal
     }
 }
@@ -85,26 +87,14 @@ sealed interface TasksListEffect {
     data class ShowSystemMessage(val message: String) : TasksListEffect
     data class NavigateToTaskDescriptionScreen(val taskId: String?) : TasksListEffect
     object NavigateToTaskListScreen : TasksListEffect
-    object ScrollToBeginningOfList : TasksListEffect
 }
 
 /**
  * [TasksListCommand] служит для описания тех команд, которые необходимо выполнить.
- *
- * Например, [GetAllTasks] служит для получения всех задач.
  */
 sealed interface TasksListCommand {
     object GetAllTasks : TasksListCommand
-
-    data class AddTask(
-        val text: String,
-        val importance: TaskImportance,
-        val deadlineDateTimestamp: Long?
-    ) : TasksListCommand
-
-    data class ChangeTaskStatus(
-        val tasks: List<TaskModel>,
-        val taskId: String,
-        val status: Boolean
-    ) : TasksListCommand
+    data class AddTask(val task: TaskModel) : TasksListCommand
+    data class RemoveTask(val task: TaskModel) : TasksListCommand
+    data class EditTask(val task: TaskModel) : TasksListCommand
 }

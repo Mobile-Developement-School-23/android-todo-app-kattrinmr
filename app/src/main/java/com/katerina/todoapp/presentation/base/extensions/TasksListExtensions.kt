@@ -3,7 +3,6 @@ package com.katerina.todoapp.presentation.base.extensions
 import android.content.Context
 import android.os.Build
 import com.katerina.todoapp.domain.models.TaskModel
-import com.katerina.todoapp.domain.utils.TaskImportance
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -12,59 +11,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-
-fun List<TaskModel>.makeTaskDone(task: TaskModel): List<TaskModel> {
-    val tasks = this.toMutableList()
-    val index = tasks.indexOfFirst { it.id == task.id }
-
-    if (index != -1) {
-        tasks[index] = task
-    }
-
-    return tasks.toList()
-}
-
-fun List<TaskModel>.removeTask(task: TaskModel): List<TaskModel> {
-    val tasks = this.toMutableList()
-    val index = tasks.indexOfFirst { it.id == task.id }
-
-    if (index != -1) {
-        tasks.removeAt(index)
-    }
-
-    return tasks.toList()
-}
-
-fun List<TaskModel>.addTask(task: TaskModel): List<TaskModel> {
-    val tasks = this.toMutableList()
-    tasks.add(0, task)
-
-    return tasks.toList()
-}
-
-fun List<TaskModel>.editTask(
-    taskId: String,
-    text: String,
-    importance: TaskImportance,
-    deadlineDateTimestamp: Long?
-): List<TaskModel> {
-    val tasks = this.toMutableList()
-    val index = tasks.indexOfFirst { it.id == taskId }
-
-    if (index != -1) {
-        val task = tasks[index]
-
-        val editedTask = task.copy(
-            text = text,
-            importance = importance,
-            deadlineDateTimestamp = deadlineDateTimestamp
-        )
-
-        tasks[index] = editedTask
-    }
-
-    return tasks
-}
 
 fun List<TaskModel>.findMaxIntId(): Int =
     maxByOrNull { it.id.toIntOrNull() ?: -1 }?.id?.toIntOrNull() ?: -1

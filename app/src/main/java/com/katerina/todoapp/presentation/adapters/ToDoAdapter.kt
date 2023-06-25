@@ -16,14 +16,9 @@ import com.katerina.todoapp.presentation.base.extensions.toDateFormat
 import com.katerina.todoapp.presentation.base.extensions.visible
 import java.util.Collections
 
-/**
- * [ToDoAdapter] - адаптер для RecyclerView списка задач.
- *
- * Наследуется также от [ItemTouchHelperAdapter] для обработки свайпов и перемещений элементов.
- */
 class ToDoAdapter(
     private val context: Context,
-    private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
+    private val onCheckboxClicked: (task: TaskModel) -> Unit,
     private val onTaskClicked: (taskId: String, task: TaskModel) -> Unit,
     private val onTaskSwipedToRight: (task: TaskModel) -> Unit,
     private val onTaskSwipedToLeft: (task: TaskModel) -> Unit,
@@ -34,7 +29,7 @@ class ToDoAdapter(
     class ToDoViewHolder(
         private val binding: ItemTaskBinding,
         private val context: Context,
-        private val onCheckboxClicked: (taskId: String, isChecked: Boolean) -> Unit,
+        private val onCheckboxClicked: (task: TaskModel) -> Unit,
         private val onTaskClicked: (taskId: String, task: TaskModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -55,7 +50,7 @@ class ToDoAdapter(
 
                 cbIsDone.apply {
                     isChecked = task.isDone
-                    setOnClickListener { onCheckboxClicked(task.id, isChecked) }
+                    setOnClickListener { onCheckboxClicked(task) }
                 }
 
                 tvTaskText.apply {
