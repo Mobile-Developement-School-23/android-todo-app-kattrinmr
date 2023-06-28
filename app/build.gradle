@@ -64,4 +64,9 @@ dependencies {
     kapt deps.dagger.daggerCompiler
     kapt deps.dagger.daggerProcessor
     implementation deps.dagger.dagger
+
+    // Room
+    implementation deps.room.runtime
+    implementation deps.room.ktx
+    kapt deps.room.compiler
 }

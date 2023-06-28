@@ -21,7 +21,8 @@ buildscript {
                 'leakCanary'     : '2.10',
                 'dagger'         : '2.45',
                 'daggerCompiler' : '2.45',
-                'daggerProcessor': '2.40'
+                'daggerProcessor': '2.40',
+                'room'           : '2.5.1'
         ]
 
         deps = [
@@ -46,6 +47,11 @@ buildscript {
                         'dagger'         : "com.google.dagger:dagger:${versions.dagger}",
                         'daggerProcessor': "com.google.dagger:dagger-android-processor:${versions.daggerProcessor}",
                         'daggerCompiler' : "com.google.dagger:dagger-compiler:${versions.daggerCompiler}"
+                ],
+                'room'      : [
+                        'runtime' : "androidx.room:room-runtime:${versions.room}",
+                        'ktx'     : "androidx.room:room-ktx:${versions.room}",
+                        'compiler': "androidx.room:room-compiler:${versions.room}"
                 ]
         ]
     }
