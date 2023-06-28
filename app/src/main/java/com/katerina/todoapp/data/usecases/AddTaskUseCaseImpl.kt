@@ -1,7 +1,7 @@
 package com.katerina.todoapp.data.usecases
 
+import com.katerina.todoapp.data.repositories.ToDoRepository
 import com.katerina.todoapp.domain.models.TaskModel
-import com.katerina.todoapp.domain.repositories.ToDoRepository
 import com.katerina.todoapp.domain.usecases.AddTaskUseCase
 import javax.inject.Inject
 

@@ -2,7 +2,6 @@ package com.katerina.todoapp.presentation.base.extensions
 
 import android.content.Context
 import android.os.Build
-import com.katerina.todoapp.domain.models.TaskModel
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -11,9 +10,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-
-fun List<TaskModel>.findMaxIntId(): Int =
-    maxByOrNull { it.id.toIntOrNull() ?: -1 }?.id?.toIntOrNull() ?: -1
 
 fun Long.toDateFormat(context: Context): String = when {
     Build.VERSION.SDK_INT >= 26 -> {

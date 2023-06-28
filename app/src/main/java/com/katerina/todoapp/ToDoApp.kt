@@ -5,5 +5,5 @@ import com.katerina.todoapp.di.AppComponent
 import com.katerina.todoapp.di.DaggerAppComponent
 
 class ToDoApp : Application() {
-    val appComponent: AppComponent = DaggerAppComponent.factory().create()
+    val appComponent: AppComponent = DaggerAppComponent.factory().create(this)
 }
