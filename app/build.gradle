@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -45,6 +46,7 @@ dependencies {
     implementation deps.androidx.appCompat
     implementation deps.androidx.constraintlayout
     implementation deps.androidx.recyclerView
+    implementation deps.androidx.preference
 
     implementation deps.material
 
@@ -59,4 +61,23 @@ dependencies {
 
     // LeakCanary
     debugImplementation deps.leakCanary
+
+    // Dagger 2
+    kapt deps.dagger.daggerCompiler
+    kapt deps.dagger.daggerProcessor
+    implementation deps.dagger.dagger
+
+    // Room
+    implementation deps.room.runtime
+    implementation deps.room.ktx
+    kapt deps.room.compiler
+
+    // Retrofit 2
+    implementation deps.retrofit.okhttp
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.loggingInterceptor
+
+    // Kotlinx Serialization
+    implementation deps.retrofit.kotlinxSerializationConverter
+    implementation deps.retrofit.kotlinxSerialization
 }

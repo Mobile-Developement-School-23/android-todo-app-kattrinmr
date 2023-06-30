@@ -1,11 +1,13 @@
 package com.katerina.todoapp.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.FragmentTasksListBinding
+import com.katerina.todoapp.di.extensions.getAppComponent
 import com.katerina.todoapp.domain.models.TaskModel
 import com.katerina.todoapp.presentation.adapters.ItemRoundedCornersDecoration
 import com.katerina.todoapp.presentation.adapters.TaskTouchHelperCallback
@@ -21,6 +23,7 @@ import com.katerina.todoapp.presentation.base.extensions.showSystemMessage
 import com.katerina.todoapp.presentation.base.extensions.viewBinding
 import com.katerina.todoapp.presentation.base.extensions.visible
 import com.katerina.todoapp.presentation.base.mappers.toUndoneTasks
+import javax.inject.Inject
 import vivid.money.elmslie.android.base.ElmFragment
 
 /**
@@ -49,9 +52,16 @@ class TasksListFragment :
     private lateinit var toDoAdapter: ToDoAdapter
     private lateinit var touchHelperCallback: ItemTouchHelper.Callback
 
-    override val initEvent = TasksListEvent.Ui.Init
+    @Inject
+    lateinit var tasksListStoreHolder: TasksListStoreHolder
 
-    override val storeHolder = TasksListStoreHolder.getStore(lifecycle)
+    override val initEvent = TasksListEvent.Ui.Init
+    override val storeHolder by lazy { tasksListStoreHolder.getStore(lifecycle) }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        getAppComponent().inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +85,6 @@ class TasksListFragment :
     override fun handleEffect(effect: TasksListEffect) = when (effect) {
         is TasksListEffect.ShowSystemMessage -> showSystemMessage(binding.root, effect.message)
         is TasksListEffect.NavigateToTaskDescriptionScreen -> navigateToTaskDescriptionScreen(effect.taskId)
-        is TasksListEffect.ScrollToBeginningOfList -> scrollToBeginningOfList()
         else -> Unit
     }
 
@@ -87,11 +96,6 @@ class TasksListFragment :
         }
     }
 
-    /**
-     * Инициализируем адаптер [ToDoAdapter], добавляем:
-     * - [ItemTouchHelper] для свайпа и перемещения
-     * - [ItemRoundedCornersDecoration] для отрисовки закругленных углов у первого и последнего элемента в списке
-     */
     private fun initTasksRecyclerView() {
         toDoAdapter = ToDoAdapter(
             requireContext(),
@@ -125,9 +129,6 @@ class TasksListFragment :
         store.accept(TasksListEvent.Ui.OnShowOrHideDoneTasksBtnClicked)
     }
 
-    /**
-     * Отрисовка Ui в случае загрузки списка задач.
-     */
     private fun showLoading() {
         with(binding) {
             progressBarTasks.invisible()
@@ -135,14 +136,8 @@ class TasksListFragment :
         }
     }
 
-    /**
-     * В будущем здесь будет отрисовка Ui в случае ошибки.
-     */
     private fun showFailure() {}
 
-    /**
-     * Отрисовка Ui в случае показа списка задач.
-     */
     private fun showTasks(tasks: List<TaskModel>?) {
         val undoneTasks = tasks?.toUndoneTasks()
         val isShowingDoneTasks = store.currentState.isShowingDoneTasks
@@ -179,18 +174,8 @@ class TasksListFragment :
         )
     }
 
-    private fun scrollToBeginningOfList() {
-        with(binding) {
-            store.currentState.tasks?.let { tasks ->
-                toDoAdapter.submitList(tasks) {
-                    rvTasks.scrollToPosition(0)
-                }
-            }
-        }
-    }
-
-    private fun onTaskCheckboxClicked(taskId: String, status: Boolean) {
-        store.accept(TasksListEvent.Ui.OnTaskCheckboxClicked(taskId, status))
+    private fun onTaskCheckboxClicked(task: TaskModel) {
+        store.accept(TasksListEvent.Ui.OnTaskCheckboxClicked(task))
     }
 
     private fun onTaskClicked(taskId: String, task: TaskModel) {

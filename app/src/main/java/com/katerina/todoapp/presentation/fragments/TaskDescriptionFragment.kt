@@ -1,6 +1,7 @@
 package com.katerina.todoapp.presentation.fragments
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.katerina.todoapp.R
 import com.katerina.todoapp.databinding.FragmentTaskDescriptionBinding
+import com.katerina.todoapp.di.extensions.getAppComponent
 import com.katerina.todoapp.domain.utils.TaskImportance
 import com.katerina.todoapp.presentation.base.extensions.createDatePicker
 import com.katerina.todoapp.presentation.base.extensions.createDateString
@@ -25,6 +27,7 @@ import com.katerina.todoapp.presentation.elm.models.TasksListEffect
 import com.katerina.todoapp.presentation.elm.models.TasksListEvent
 import com.katerina.todoapp.presentation.elm.models.TasksListState
 import com.katerina.todoapp.presentation.elm.models.TasksListStatus
+import javax.inject.Inject
 import vivid.money.elmslie.android.base.ElmFragment
 
 /**
@@ -58,8 +61,11 @@ class TaskDescriptionFragment :
     private lateinit var taskId: String
     private val args: TaskDescriptionFragmentArgs by navArgs()
 
-    override val storeHolder = TasksListStoreHolder.getStore(lifecycle)
+    @Inject
+    lateinit var tasksListStoreHolder: TasksListStoreHolder
+
     override val initEvent = TasksListEvent.Ui.Init
+    override val storeHolder by lazy { tasksListStoreHolder.getStore(lifecycle) }
 
     private val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
         binding.tvDeadline.text = createDateString(day, month + 1, year)
@@ -84,6 +90,11 @@ class TaskDescriptionFragment :
                 }
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        getAppComponent().inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -194,22 +205,23 @@ class TaskDescriptionFragment :
             val tasksListStatus =
                 store.currentState.tasksListStatus as TasksListStatus.ShowingTaskDescription
 
-            if (tasksListStatus.deadlineDateTimestamp != null) {
+            val task = tasksListStatus.task
 
-                if (tasksListStatus.task?.deadlineDateTimestamp != null) {
-                    switchEnableDeadline.isChecked = true
-                    onSwitchClicked(true)
-                }
+            if (task?.deadlineDateTimestamp != null) {
+
+                switchEnableDeadline.isChecked = true
+                onSwitchClicked(true)
 
                 tvDeadline.text =
-                    tasksListStatus.deadlineDateTimestamp.toDateFormat(requireContext())
+                    task.deadlineDateTimestamp.toDateFormat(requireContext())
             }
 
-            tasksListStatus.task?.text?.let { text ->
-                etTaskDescription.setText(text)
+            task?.text?.let { text ->
+                if (text.isNotBlank())
+                    etTaskDescription.setText(text)
             }
 
-            tvImportance.text = tasksListStatus.importance.getLocalName(requireContext())
+            tvImportance.text = task?.importance?.getLocalName(requireContext())
         }
     }
 

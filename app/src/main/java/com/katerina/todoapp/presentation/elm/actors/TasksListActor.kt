@@ -1,14 +1,13 @@
 package com.katerina.todoapp.presentation.elm.actors
 
-import com.katerina.todoapp.data.usecases.AddTaskUseCaseImpl
-import com.katerina.todoapp.data.usecases.ChangeTaskStatusUseCaseImpl
-import com.katerina.todoapp.data.usecases.GetAllTasksUseCaseImpl
 import com.katerina.todoapp.domain.usecases.AddTaskUseCase
-import com.katerina.todoapp.domain.usecases.ChangeTaskStatusUseCase
+import com.katerina.todoapp.domain.usecases.EditTaskUseCase
 import com.katerina.todoapp.domain.usecases.GetAllTasksUseCase
+import com.katerina.todoapp.domain.usecases.RemoveTaskUseCase
 import com.katerina.todoapp.presentation.elm.models.TasksListCommand
 import com.katerina.todoapp.presentation.elm.models.TasksListEvent
 import com.katerina.todoapp.presentation.base.extensions.mapResultEvents
+import javax.inject.Inject
 import vivid.money.elmslie.coroutines.Actor
 
 /**
@@ -20,20 +19,19 @@ import vivid.money.elmslie.coroutines.Actor
  * Результат каждого юзкейса маппится либо в событие, которое означает успех, либо в событие, которое обозначает ошибку
  * с помощью [mapResultEvents][com.katerina.todoapp.presentation.base.extensions.mapResultEvents].
  */
-class TasksListActor : Actor<TasksListCommand, TasksListEvent> {
-
-    /**
-     * В будущем юзкейсы будут инжектиться с помощью даггера, а пока что так.
-     */
-    private val getAllTasksUseCase: GetAllTasksUseCase by lazy { GetAllTasksUseCaseImpl() }
-    private val addTaskUseCase: AddTaskUseCase by lazy { AddTaskUseCaseImpl() }
-    private val changeTaskStatusUseCase: ChangeTaskStatusUseCase by lazy { ChangeTaskStatusUseCaseImpl() }
+class TasksListActor @Inject constructor(
+    private val getAllTasksUseCase: GetAllTasksUseCase,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val removeTaskUseCase: RemoveTaskUseCase,
+    private val editTaskUseCase: EditTaskUseCase
+) : Actor<TasksListCommand, TasksListEvent> {
 
     /**
      * Описание команд:
      * - [TasksListCommand.GetAllTasks] - команда получения всех задач.
      * - [TasksListCommand.AddTask] - команда добавления новой задачи.
-     * - [TasksListCommand.ChangeTaskStatus] - команда изменения статуса задачи (выполнена / не выполнена)
+     * - [TasksListCommand.RemoveTask] - команда удаления задачи.
+     * - [TasksListCommand.EditTask] - команда редактирования задачи.
      */
     override fun execute(command: TasksListCommand) = when (command) {
 
@@ -45,20 +43,24 @@ class TasksListActor : Actor<TasksListCommand, TasksListEvent> {
                 )
 
         is TasksListCommand.AddTask ->
-            addTaskUseCase(command.text, command.importance, command.deadlineDateTimestamp)
+            addTaskUseCase(command.task)
                 .mapResultEvents(
                     TasksListEvent.Internal::AddTaskSuccess,
                     TasksListEvent.Internal::Error
                 )
 
-        is TasksListCommand.ChangeTaskStatus ->
-            changeTaskStatusUseCase(
-                command.tasks,
-                command.taskId,
-                command.status
-            ).mapResultEvents(
-                TasksListEvent.Internal::LoadAllTasksSuccess,
-                TasksListEvent.Internal::Error
-            )
+        is TasksListCommand.RemoveTask ->
+            removeTaskUseCase(command.task)
+                .mapResultEvents(
+                    TasksListEvent.Internal::RemoveTaskSuccess,
+                    TasksListEvent.Internal::Error
+                )
+
+        is TasksListCommand.EditTask ->
+            editTaskUseCase(command.task)
+                .mapResultEvents(
+                    TasksListEvent.Internal::EditTaskSuccess,
+                    TasksListEvent.Internal::Error
+                )
     }
 }

@@ -2,11 +2,11 @@ package com.katerina.todoapp.data.usecases
 
 import com.katerina.todoapp.data.repositories.ToDoRepository
 import com.katerina.todoapp.domain.models.TaskModel
-import com.katerina.todoapp.domain.usecases.AddTaskUseCase
+import com.katerina.todoapp.domain.usecases.RemoveTaskUseCase
 import javax.inject.Inject
 
-class AddTaskUseCaseImpl @Inject constructor(
+class RemoveTaskUseCaseImpl @Inject constructor(
     private val toDoRepository: ToDoRepository
-) : AddTaskUseCase {
-    override fun invoke(task: TaskModel) = toDoRepository.addTask(task)
+) : RemoveTaskUseCase {
+    override fun invoke(task: TaskModel) = toDoRepository.removeTask(task)
 }
