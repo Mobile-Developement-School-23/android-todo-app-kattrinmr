@@ -2,6 +2,7 @@ package com.katerina.todoapp.di
 
 import android.content.Context
 import com.katerina.todoapp.di.modules.ElmModule
+import com.katerina.todoapp.di.modules.NetworkModule
 import com.katerina.todoapp.di.modules.RoomModule
 import com.katerina.todoapp.di.modules.UseCaseModule
 import com.katerina.todoapp.presentation.fragments.TaskDescriptionFragment
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [RoomModule::class, UseCaseModule::class, ElmModule::class]
+    modules = [RoomModule::class, NetworkModule::class, UseCaseModule::class, ElmModule::class]
 )
 interface AppComponent {
 

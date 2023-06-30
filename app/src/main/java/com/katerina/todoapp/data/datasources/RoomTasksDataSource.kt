@@ -39,6 +39,10 @@ class RoomTasksDataSource @Inject constructor(
         }
     }
 
+    fun addTasks(tasks: List<TaskModel>) {
+        tasksDao.insertTasks(tasks.map { task -> task.toEntity() })
+    }
+
     override fun editTask(task: TaskModel) = safeCall {
         addTask(task).collect { result ->
             if (result is DataSourceResult.Success) {
